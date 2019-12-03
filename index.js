@@ -60,7 +60,7 @@ async function bumpVersion() {
       const builds = await get("https://api.appstoreconnect.apple.com/v1/builds", { "filter[app]": appId, limit: 1, sort: "-version" }, token);
       const currentBuildNumber = builds.data[0].attributes.version;
       if (currentBuildNumber) {
-        shell.exec(`xcrun agvtool new-version ${currentBuildNumber} -all`);
+        shell.exec(`xcrun agvtool new-version -all ${currentBuildNumber}`);
         shell.exec(`xcrun agvtool bump -all`);
       } else {
         throw `Could not find the Version Number for ${appId}`;  
