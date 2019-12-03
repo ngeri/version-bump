@@ -3,13 +3,13 @@
 This action will check the App Store Connect based on the provided inputs and bumps the bundle version number of the already checked out xcode project.
 Apple Generic should be set for the Versioning System build setting.
 
-**Please use this action with secrets only!**
+**Please use secrets when appropriate!**
 
 [How to add a secrets?](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets)
 
 ## Inputs
 
-### `appstoreConnectPrivateKey`
+### `appStoreConnectPrivateKey`
 
 **Required** App Store Connect private key with header and footer
 
@@ -33,10 +33,10 @@ Apple Generic should be set for the Versioning System build setting.
 
 ```yaml
 - name: Build number bump
-  uses: ngeri/version-bump@v1.0.0
+  uses: ngeri/version-bump@v1.0.1
   with:
-    appstoreConnectPrivateKey: ${{ secrets.AC_PRIVATE_KEY_WITH_HEADER_FOOTER }}
-    keyID: ${{ secrets.AC_PRIVATE_KEY_ID }}
-    issuerID: ${{ secrets.AC_ISSUER }}
-    targetName: "Actions"
+    appStoreConnectPrivateKey: ${{ secrets.appStoreConnectPrivateKey }}
+    keyID: ${{ env.keyID }}
+    issuerID: ${{ env.issuerID }}
+    targetName: ${{ env.targetName }}
 ```

@@ -1,13 +1,10 @@
 const core = require('@actions/core');
 const shell = require(`shelljs`);
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
 const axios = require('axios');
 
 function getSettingsFor(targetName, settingId) {
-  // TODO: Check this line
   const buildSettings = shell.exec(`xcodebuild -target ${targetName} -showBuildSettings`, { silent: true });
-  // TODO: Check this line
   const bundleIds =  buildSettings.split(`\n`).filter(function(item) {
     return item.includes(settingId)
   });
@@ -50,21 +47,21 @@ async function get(url, params, token, method = "GET") {
 
 async function bumpVersion() {
   try {
-    const appstoreConnectPrivateKey = core.getInput("appstoreConnectPrivateKey");
+    const appStoreConnectPrivateKey = core.getInput("appStoreConnectPrivateKey");
     const keyID = core.getInput("keyID");
     const issuerID = core.getInput("issuerID");
     const targetName = core.getInput("targetName");
     const bundleIdIdentifier = "PRODUCT_BUNDLE_IDENTIFIER";
     const bundleId = getSettingsFor(targetName, bundleIdIdentifier);
-    const token = getToken(issuerID, 2, Buffer.from(appstoreConnectPrivateKey, "utf8"), keyID);
+    const token = getToken(issuerID, 2, Buffer.from(appStoreConnectPrivateKey, "utf8"), keyID);
     const appResponse = await get("https://api.appstoreconnect.apple.com/v1/apps", { "filter[bundleId]" : bundleId }, token);
     const appId = appResponse.data[0].id;
     if (appId) {
       const builds = await get("https://api.appstoreconnect.apple.com/v1/builds", { "filter[app]": appId, limit: 1, sort: "-version" }, token);
       const currentBuildNumber = builds.data[0].attributes.version;
       if (currentBuildNumber) {
-        const nextBuildNumber = Number(currentBuildNumber) + 1;
-        shell.exec(`xcrun agvtool new-version ${nextBuildNumber}`);
+        shell.exec(`xcrun agvtool new-version ${currentBuildNumber} -all`);
+        shell.exec(`xcrun agvtool bump -all`);
       } else {
         throw `Could not find the Version Number for ${appId}`;  
       }

@@ -1,7 +1,7 @@
 name: 'Version bumper for iOS projects'
 description: 'Bumps the version number of a project'
 inputs:
-  appstoreConnectPrivateKey:
+  appStoreConnectPrivateKey:
     description: 'App Store Connect api key'
     required: true
   keyID:
