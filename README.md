@@ -33,7 +33,7 @@ Apple Generic should be set for the Versioning System build setting.
 
 ```yaml
 - name: Build number bump
-  uses: ngeri/version-bump@v1.0.1
+  uses: ngeri/version-bump@v1.0.2
   with:
     appStoreConnectPrivateKey: ${{ secrets.appStoreConnectPrivateKey }}
     keyID: ${{ env.keyID }}
